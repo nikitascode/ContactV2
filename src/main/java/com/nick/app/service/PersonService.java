@@ -14,15 +14,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PersonService {
+public class PersonService implements CrudService<PersonDto> {
 
-    @Autowired
     private PersonRepository personRepository;
+
     @Autowired
     private ContactRepository contactRepository;
 
     private ConverterFactory converterFactory = new ConverterFactory(new PersonConverter());
 
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
+
+    @Override
     public List<PersonDto> findAll() {
         return personRepository.findAll()
                 .stream()
@@ -30,15 +35,18 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public PersonDto findById(Long id) {
         return (PersonDto) converterFactory.toDto(personRepository.findById(id).get());
     }
 
+    @Override
     public PersonDto save(PersonDto personDto) {
         personRepository.save((PersonEntity) converterFactory.toEntity(personDto));
         return personDto;
     }
 
+    @Override
     public List<PersonDto> saveAll(List<PersonDto> personsDto) {
         personRepository.saveAll(personsDto
                 .stream()
@@ -48,7 +56,7 @@ public class PersonService {
     }
 
     public List<PersonDto> findPeopleByBirthDateBetween(Date firstDate, Date secondDate) {
-        return personRepository.findByBirthDateBetweenAndBirthDate(firstDate, secondDate)
+        return personRepository.findByBirthDateAfterAndBirthDateBefore(firstDate, secondDate)
                 .stream()
                 .map(personEntity -> (PersonDto) converterFactory.toDto(personEntity))
                 .collect(Collectors.toList());
@@ -61,10 +69,12 @@ public class PersonService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void delete(PersonDto personDto) {
         personRepository.delete((PersonEntity) converterFactory.toEntity(personDto));
     }
 
+    @Override
     public void deleteById(Long id) {
         personRepository.deleteById(id);
     }

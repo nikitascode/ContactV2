@@ -8,5 +8,5 @@ import java.util.List;
 
 
 public interface PersonRepository extends JpaRepository<PersonEntity, Long> {
-    List<PersonEntity> findByBirthDateBetweenAndBirthDate(Date firstDate, Date secondDate);
+    List<PersonEntity> findByBirthDateAfterAndBirthDateBefore(Date firstDate, Date secondDate);
 }
