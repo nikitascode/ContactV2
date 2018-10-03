@@ -12,6 +12,7 @@ public class ContactConverter implements Converter<ContactDto, ContactEntity> {
                 .id(entity.getId())
                 .email(entity.getEmail())
                 .phonenumber(entity.getPhonenumber())
+                .owner(entity.getOwner())
                 .build();
     }
 
@@ -21,6 +22,7 @@ public class ContactConverter implements Converter<ContactDto, ContactEntity> {
                 .id(dto.getId())
                 .email(dto.getEmail())
                 .phonenumber(dto.getPhonenumber())
+                .owner(dto.getOwner())
                 .build();
     }
 }
